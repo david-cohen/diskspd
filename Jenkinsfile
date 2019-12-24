@@ -3,7 +3,7 @@ pipeline {
   agent {
     node {
       label 'windows_builder'
-		}
+    	 }
 	}
   stages {
     stage('Call Library') {
@@ -12,7 +12,7 @@ pipeline {
 			script {
 			InstallWindowsBuilderDependencies.call()
 			}
-                    
+			}
 		}
 	stage('Update Version'){
 		steps {
