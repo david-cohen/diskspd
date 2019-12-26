@@ -11,7 +11,7 @@ pipeline {
 			checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'WindowsBuilder']], gitTool: 'default', submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'enmotusdavecohen', url: 'https://github.com/Enmotus-Dave-Cohen/WindowsBuilder.git']]]
 			script {
 			InstallWindowsBuilderDependencies.call()
-			}
+			  }
 			}
 		}
 	stage('Update Version'){
@@ -19,6 +19,8 @@ pipeline {
 			script {
                     if(currentBuild.changeSets.size() > 0) {
                         echo "version number needs to be updated"
+						System.setProperty("VERSION_STAMP", versionstamp.get(""))	
+						echo "%VERSION_STAMP%"
                     }
                     else {
                         echo "there are no changes in this build"
