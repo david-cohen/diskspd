@@ -3,16 +3,16 @@ pipeline {
   agent {
     node {
       label 'windows_builder'
-		}
+    	 }
 	}
   stages {
     stage('Call Library') {
 		steps {
-			checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], gitTool: 'default', submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'enmotusdavecohen', url: 'https://github.com/Enmotus-Dave-Cohen/WindowsBuilder.git']]]
+			checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'WindowsBuilder']], gitTool: 'default', submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'enmotusdavecohen', url: 'https://github.com/Enmotus-Dave-Cohen/WindowsBuilder.git']]]
 			script {
 			InstallWindowsBuilderDependencies.call()
+			  }
 			}
-          }       
 		}
 	stage('Update Version'){
 		steps {
