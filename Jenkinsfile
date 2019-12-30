@@ -25,7 +25,7 @@ pipeline {
                     }
                     else {
                         echo "there are no changes in this build"
-						bat(script: 'C:\Jenkins\workspace\output\versionstamp-1.0.0.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc  >> version.txt')
+						bat(script: 'C:\\Jenkins\\workspace\\output\\versionstamp-1.0.0.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc  >> version.txt')
 						env.VERSION_STAMP = readFile 'version.txt'	
 						echo "%VERSION_STAMP%"
                     }
