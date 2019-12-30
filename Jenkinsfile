@@ -19,7 +19,7 @@ pipeline {
 			script {
                     if(currentBuild.changeSets.size() > 0) {
                         echo "version number needs to be updated"
-						bat(script: 'C:\Jenkins\workspace\output\versionstamp-1.0.0.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc Increment >> version.txt')
+						bat(script: 'C:\\Jenkins\\workspace\\output\\versionstamp-1.0.0.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc Increment >> version.txt')
 						env.VERSION_STAMP = readFile 'version.txt'	
 						echo "%VERSION_STAMP%"
                     }
