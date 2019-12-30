@@ -19,11 +19,15 @@ pipeline {
 			script {
                     if(currentBuild.changeSets.size() > 0) {
                         echo "version number needs to be updated"
-						System.setProperty("VERSION_STAMP", versionstamp.get(""))	
+						bat(script: 'C:\Jenkins\workspace\output\versionstamp-1.0.0.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc Increment >> version.txt')
+						env.VERSION_STAMP = readFile 'version.txt'	
 						echo "%VERSION_STAMP%"
                     }
                     else {
                         echo "there are no changes in this build"
+						bat(script: 'C:\Jenkins\workspace\output\versionstamp-1.0.0.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc  >> version.txt')
+						env.VERSION_STAMP = readFile 'version.txt'	
+						echo "%VERSION_STAMP%"
                     }
 			}
 		}
@@ -32,12 +36,12 @@ pipeline {
       steps {
         bat(script: 'PATH = %PATH%;"C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.8 Tools"', label: 'Set path for xsd.exe')
         bat(script: 'setx /m Path "%Path%;C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.8 Tools"', label: 'Setting Path')
-        bat '"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\MSBuild\\Current\\Bin\\msbuild" /t:Build /p:Configuration=Release /p:Platform="x64" C:\\Jenkins\\workspace\\DiskSpd_master\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary.sln'
+        bat '"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\MSBuild\\Current\\Bin\\msbuild" /t:Build /p:Configuration=Release /p:Platform="x64" %WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary.sln'
       }
     }
     stage('Deploy to Nexus') {
       steps {
-        bat(script: 'mvn deploy:deploy-file -DgroupId=com.enmotus -DartifactId=diskspd_CLRclassLibrary -Dversion=2.0.21a -DgeneratePom=true -Dpackaging=dll -DrepositoryId=enmotus-nexus -Durl=http://23.99.9.34:8081/repository/maven-releases -Dfile=C:\\Jenkins\\workspace\\DiskSpd_master\\diskspd_CLRclassLibrary\\x64\\Release\\\\diskspd_CLRclassLibrary.dll', returnStatus: true, label: 'mvn deploy:deploy-file')
+        bat(script: 'mvn deploy:deploy-file -DgroupId=com.enmotus -DartifactId=diskspd_CLRclassLibrary -Dversion=2.0.21a -DgeneratePom=true -Dpackaging=dll -DrepositoryId=enmotus-nexus -Durl=http://23.99.9.34:8081/repository/maven-releases -Dfile=%WORKSPACE%\\diskspd_CLRclassLibrary\\x64\\Release\\\\diskspd_CLRclassLibrary.dll', returnStatus: true, label: 'mvn deploy:deploy-file')
       }
     }
   }
