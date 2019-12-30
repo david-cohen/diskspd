@@ -20,15 +20,16 @@ pipeline {
                     if(currentBuild.changeSets.size() > 0) {
                         echo "version number needs to be updated"
 						bat(script: 'C:\\Jenkins\\workspace\\output\\versionstamp-1.0.0.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc Increment >> version.txt')
-						env.VERSION_STAMP = readFile 'version.txt'	
-						echo "%VERSION_STAMP%"
+
                     }
                     else {
                         echo "there are no changes in this build"
 						bat(script: 'C:\\Jenkins\\workspace\\output\\versionstamp-1.0.0.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc  >> version.txt')
+						}
+
 						env.VERSION_STAMP = readFile 'version.txt'	
-						echo "%VERSION_STAMP%"
-                    }
+						echo "%VERSION_STAMP%"                    
+					}
 			}
 		}
 	}
@@ -41,7 +42,7 @@ pipeline {
     }
     stage('Deploy to Nexus') {
       steps {
-        bat(script: 'mvn deploy:deploy-file -DgroupId=com.enmotus -DartifactId=diskspd_CLRclassLibrary -Dversion=2.0.21a -DgeneratePom=true -Dpackaging=dll -DrepositoryId=enmotus-nexus -Durl=http://23.99.9.34:8081/repository/maven-releases -Dfile=%WORKSPACE%\\diskspd_CLRclassLibrary\\x64\\Release\\\\diskspd_CLRclassLibrary.dll', returnStatus: true, label: 'mvn deploy:deploy-file')
+        bat(script: 'mvn deploy:deploy-file -DgroupId=com.enmotus -DartifactId=diskspd_CLRclassLibrary -Dversion=%VERSION_STAMP% -DgeneratePom=true -Dpackaging=dll -DrepositoryId=enmotus-nexus -Durl=http://23.99.9.34:8081/repository/maven-releases -Dfile=%WORKSPACE%\\diskspd_CLRclassLibrary\\x64\\Release\\diskspd_CLRclassLibrary.dll', returnStatus: true, label: 'mvn deploy:deploy-file')
       }
     }
   }
