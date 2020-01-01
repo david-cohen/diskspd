@@ -23,7 +23,7 @@ pipeline {
 						
 						withCredentials([usernamePassword(credentialsId: 'enmotusdavecohen', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
 							bat(script: 'git commit -a')
-							 bat(script: 'git --ammend )
+							 bat(script: 'git --ammend ' )
 						}
                     }
                     else {
