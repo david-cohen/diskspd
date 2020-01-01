@@ -20,7 +20,11 @@ pipeline {
                     if(currentBuild.changeSets.size() > 0) {
                         echo "version number needs to be updated"
 						bat(script: 'C:\\Jenkins\\workspace\\output\\versionstamp-1.0.0.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc Increment >> version.txt')
-
+						
+						withCredentials([usernamePassword(credentialsId: 'enmotusdavecohen', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+							bat(script: 'git commit  https://${USER}:${PASSWORD}@//github.com/Enmotus-Dave-Cohen/diskspd/blob/master/diskspd_CLRclassLibrary/diskspd_CLRclassLibrary/app.rc')
+							 bat(script: 'git --ammend https://${USER}:${PASSWORD}@//github.com/Enmotus-Dave-Cohen/diskspd/blob/master/diskspd_CLRclassLibrary/diskspd_CLRclassLibrary/app.rc')
+							 }
                     }
                     else {
                         echo "there are no changes in this build"
@@ -29,7 +33,6 @@ pipeline {
 
 						env.VERSION_STAMP = readFile 'version.txt'	
 						echo "${VERSION_STAMP}"     
-						git credentialsId: 'enmotusdavecohen', url: 'https://github.com/Enmotus-Dave-Cohen/diskspd.git'
 					}
 			}
 		}
