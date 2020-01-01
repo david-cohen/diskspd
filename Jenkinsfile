@@ -22,9 +22,9 @@ pipeline {
 						bat(script: 'C:\\Jenkins\\workspace\\output\\versionstamp-1.0.0.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc Increment >> version.txt')
 						
 						withCredentials([usernamePassword(credentialsId: 'enmotusdavecohen', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
-							bat(script: 'git commit ')
-							 bat(script: 'git --ammend https://${USER}:${PASSWORD}@//github.com/Enmotus-Dave-Cohen/diskspd/blob/master/diskspd_CLRclassLibrary/diskspd_CLRclassLibrary/app.rc')
-							 }
+							bat(script: 'git commit -a')
+							 bat(script: 'git --ammend )
+						}
                     }
                     else {
                         echo "there are no changes in this build"
