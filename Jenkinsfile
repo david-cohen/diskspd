@@ -22,8 +22,8 @@ pipeline {
 						bat(script: 'C:\\Jenkins\\workspace\\output\\versionstamp-1.0.0.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc Increment >> version.txt')
 						
 						withCredentials([usernamePassword(credentialsId: 'enmotusdavecohen', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
-							bat(script: 'git commit -a -m "Updated Version Stamp"')
-							 bat(script: 'git push' )
+							bat(script: 'git commit -a -m "Updated Version Stamp to "${VERSION_STAMP}"')
+							bat(script: ' git push --set-upstream origin master' )
 						}
                     }
                     else {
