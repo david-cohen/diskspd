@@ -23,8 +23,7 @@ pipeline {
 				env.VERSION_STAMP = readFile 'version.txt'	
 				echo "${VERSION_STAMP}"  
 				withCredentials([usernamePassword(credentialsId: 'EnmotusGitAgent', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
-					bat(script: 'git commit -a -m "Updated Version Stamp to ${VERSION_STAMP}"')
-					bat (script: 'echo %USER%   $USER   ${USER}    env.USER')
+					bat(script: 'git commit -a -m "Updated Version Stamp to %VERSION_STAMP%"')
 					bat(script: 'git push https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git master')
 				}
 			    }
@@ -48,8 +47,8 @@ pipeline {
 	  stage('Tag Build') {
       steps {
 		withCredentials([usernamePassword(credentialsId: 'EnmotusGitAgent', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
-			bat(script: 'git tag -a v${VERSION_STAMP} -m "Build ${VERSION_STAMP}"')
-			bat(script: 'git push origin v${VERSION_STAMP}' )
+			bat(script: 'git tag -a %VERSION_STAMP% -m "Build %VERSION_STAMP%"')
+			bat(script: 'git push https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git master v%VERSION_STAMP%' )
 		}
       }
     }
