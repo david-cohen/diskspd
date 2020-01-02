@@ -1,4 +1,4 @@
-library identifier: 'EnmotusBuildTools@master', retriever: modernSCM([$class: 'GitSCMSource', credentialsId: 'enmotus-agent', gitTool: 'master_git', remote: 'https://github.com/Enmotus-Dave-Cohen/EnmotusBuildTools.git', traits: [[$class: 'jenkins.plugins.git.traits.BranchDiscoveryTrait'], [$class: 'GitToolSCMSourceTrait', gitTool: 'master_git']]])
+library identifier: 'EnmotusBuildTools@master', retriever: modernSCM([$class: 'GitSCMSource', credentialsId: 'EnmotusGitAgent', gitTool: 'master_git', remote: 'https://github.com/Enmotus-Dave-Cohen/EnmotusBuildTools.git', traits: [[$class: 'jenkins.plugins.git.traits.BranchDiscoveryTrait'], [$class: 'GitToolSCMSourceTrait', gitTool: 'master_git']]])
 pipeline {
   agent {
     node {
@@ -8,7 +8,7 @@ pipeline {
   stages {
     stage('Call Library') {
 		steps {
-			checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'WindowsBuilder']], gitTool: 'default', submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'enmotus-agent', url: 'https://github.com/Enmotus-Dave-Cohen/WindowsBuilder.git']]]
+			checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'WindowsBuilder']], gitTool: 'default', submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'EnmotusGitAgent', url: 'https://github.com/Enmotus-Dave-Cohen/WindowsBuilder.git']]]
 			script {
 			InstallWindowsBuilderDependencies.call()
 			  }
@@ -22,7 +22,7 @@ pipeline {
 				bat(script: 'C:\\Jenkins\\workspace\\output\\versionstamp-1.0.0.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc Increment >> version.txt')
 				env.VERSION_STAMP = readFile 'version.txt'	
 				echo "${VERSION_STAMP}"  
-				withCredentials([usernamePassword(credentialsId: 'enmotus-agent', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+				withCredentials([usernamePassword(credentialsId: 'EnmotusGitAgent', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
 					bat(script: 'git commit -a -m "Updated Version Stamp to ${VERSION_STAMP}"')
 					bat (script: 'echo %USER%   $USER   ${USER}    env.USER')
 					bat(script: 'git push https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git master')
@@ -47,7 +47,7 @@ pipeline {
 	  }
 	  stage('Tag Build') {
       steps {
-		withCredentials([usernamePassword(credentialsId: 'enmotus-agent', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+		withCredentials([usernamePassword(credentialsId: 'EnmotusGitAgent', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
 			bat(script: 'git tag -a v${VERSION_STAMP} -m "Build ${VERSION_STAMP}"')
 			bat(script: 'git push origin v${VERSION_STAMP}' )
 		}
