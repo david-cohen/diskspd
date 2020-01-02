@@ -48,7 +48,7 @@ pipeline {
       steps {
 		withCredentials([usernamePassword(credentialsId: 'EnmotusGitAgent', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
 			bat(script: 'git tag -a %VERSION_STAMP% -m "Build %VERSION_STAMP%"')
-			bat(script: 'git push https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git master v%VERSION_STAMP%' )
+			bat(script: 'git push https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git master' )
 		}
       }
     }
