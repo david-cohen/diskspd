@@ -17,24 +17,27 @@ pipeline {
 	stage('Update Version'){
 		steps {
 			script {
-                    if(currentBuild.changeSets.size() > 0) {
-                        echo "version number needs to be updated"
-						bat(script: 'C:\\Jenkins\\workspace\\output\\versionstamp-1.0.0.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc Increment >> version.txt')
-						withCredentials([usernamePassword(credentialsId: 'enmotusdavecohen', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
-							bat(script: 'git commit -a -m "Updated Version Stamp to ${VERSION_STAMP}"')
-							bat(script: 'git push https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git master')
-						}
-                    }
-                    else {
-                        echo "there are no changes in this build"
-						bat(script: 'C:\\Jenkins\\workspace\\output\\versionstamp-1.0.0.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc  >> version.txt')
-						}
+			    if(currentBuild.changeSets.size() > 0) {
+				echo "version number needs to be updated"
+				bat(script: 'C:\\Jenkins\\workspace\\output\\versionstamp-1.0.0.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc Increment >> version.txt')
+				env.VERSION_STAMP = readFile 'version.txt'	
+				echo "${VERSION_STAMP}"  
+				withCredentials([usernamePassword(credentialsId: 'enmotusdavecohen', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+					bat(script: 'git commit -a -m "Updated Version Stamp to ${VERSION_STAMP}"')
+					bat (script: 'echo %USER%   $USER   ${USER}    env.USER')
+					bat(script: 'git push https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git master')
+				}
+			    }
+			    else {
+				echo "there are no changes in this build"
+				bat(script: 'C:\\Jenkins\\workspace\\output\\versionstamp-1.0.0.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc  >> version.txt')
+				}
+				env.VERSION_STAMP = readFile 'version.txt'	
+				echo "${VERSION_STAMP}"  
 
-						env.VERSION_STAMP = readFile 'version.txt'	
-						echo "${VERSION_STAMP}"     
-					}
+			    }
 			}
-		}
+	  }
 	  stage('Build DiskSpd Class Library') {
       steps {
 			bat(script: 'PATH = %PATH%;"C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.8 Tools"', label: 'Set path for xsd.exe')
