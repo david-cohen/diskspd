@@ -59,6 +59,7 @@ pipeline {
 		  script {
 		   if(currentBuild.changeSets.size() > 0) {
 				bat(script: 'mvn deploy:deploy-file -DgroupId=com.enmotus -DartifactId=diskspd_CLRclassLibrary -Dversion=%VERSION_STAMP% -DgeneratePom=true -Dpackaging=dll -DrepositoryId=enmotus-nexus -Durl=http://23.99.9.34:8081/repository/maven-releases -Dfile=%WORKSPACE%\\diskspd_CLRclassLibrary\\x64\\Release\\diskspd_CLRclassLibrary.dll', returnStatus: true, label: 'mvn deploy:deploy-file')
+				createSummary icon:'package.png', text: "<a href=\'http://23.99.9.34:8081/repository/maven-releases/com/enmotus/diskspd_CLRclassLibrary/${VERSION_STAMP}/diskspd_CLRclassLibrary-${VERSION_STAMP}.dll\'>Download DiskSpd CLR Class Library</a>"
 			}
 			else
 			{
