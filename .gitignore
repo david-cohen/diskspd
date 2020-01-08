@@ -188,3 +188,9 @@ FakesAssemblies/
 /diskspd_CLRclassLibrary/.vs/diskspd_CLRclassLibrary/v15/Browse.VC.db
 /diskspd_vs/.vs/diskspd/v15/Browse.VC.db
 /diskspd_CLRclassLibrary/.gitignore
+/.vs/config/applicationhost.config
+/diskspd_CLRclassLibrary/.vs/config/applicationhost.config
+/diskspd_CLRclassLibrary/.vs/diskspd_CLRclassLibrary/v15/Browse.VC.opendb
+/CppProperties.json
+/diskspd_CLRclassLibrary/.vs/diskspd_CLRclassLibrary/v15/Solution.VC.db-shm
+/diskspd_CLRclassLibrary/.vs/diskspd_CLRclassLibrary/v15/Solution.VC.db-wal
