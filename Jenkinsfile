@@ -19,7 +19,9 @@ pipeline {
 			script {
 			    if(currentBuild.changeSets.size() > 0) {
 				echo "version number needs to be updated"
-				bat(script: 'C:\\Jenkins\\workspace\\output\\versionstamp-1.0.0.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc Increment >> version.txt')
+				bat(script: 'C:\\Jenkins\\workspace\\output\\versionstamp.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc >> lastversion.txt')
+				bat(script: 'C:\\Jenkins\\workspace\\output\\versionstamp.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc Increment >> version.txt')
+				env.LAST_VERSION_STAMP = readFile 'lastversion.txt'
 				env.VERSION_STAMP = readFile 'version.txt'	
 				echo "${VERSION_STAMP}"  
 				withCredentials([usernamePassword(credentialsId: 'EnmotusGitAgent', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
@@ -30,7 +32,7 @@ pipeline {
 			    }
 			    else {
 				echo "there are no changes in this build"
-				bat(script: 'C:\\Jenkins\\workspace\\output\\versionstamp-1.0.0.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc  >> version.txt')
+				bat(script: 'C:\\Jenkins\\workspace\\output\\versionstamp.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc  >> version.txt')
 				}
 				env.VERSION_STAMP = readFile 'version.txt'	
 				echo "${VERSION_STAMP}"  
@@ -52,6 +54,26 @@ pipeline {
 			bat(script: 'git pull https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git')
 			bat(script: 'git push https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git master --tags' )
 		}
+      }
+    }
+	stage('Doxygen') {
+      steps {
+        dir(path: 'C:\\Jenkins\\workspace\\EnhancedUserInterface_master\\StorageAnalyzer') {
+          bat 'C:\\Jenkins\\workspace\\output\\doxygen.exe %WORKSPACE%\\Doxygen.cfg'
+        }
+		publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '%WORKSPACE%\\docs', reportFiles: 'index.html', reportName: 'Architectural Documentation', reportTitles: 'Diskspd CLR Class Library'])
+      }
+    }
+	stage('Release Notes') {
+      steps {
+		  script {
+		   if(currentBuild.changeSets.size() > 0) {
+			 bat 'C:\\Jenkins\\workspace\\output\\releasenotes.exe path="%WORKSPACE% name=Diskspd From=v2.0.20a To=%VERSION_STAMP% repo=https://github.com/Enmotus-Dave-Cohen/diskspd id=2388216 pivotal=cf2870f765936d635fa8bbdd20d81fea >> ReleaseNotes.html_v2.0.20a-%VERSION_STAMP%.html'
+			 bat 'C:\\Jenkins\\workspace\\output\\releasenotes.exe path="%WORKSPACE% name=Diskspd From=v2.0.20a To=%VERSION_STAMP% repo=https://github.com/Enmotus-Dave-Cohen/diskspd id=2388216 pivotal=cf2870f765936d635fa8bbdd20d81fea >> ReleaseNotes_%LAST_VERSION_STAMP%-%VERSION_STAMP%.html'
+			publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '%WORKSPACE%', reportFiles: 'ReleaseNotes.html_v2.0.20a-%VERSION_STAMP%.html', reportName: 'Release Notes', reportTitles: 'Release Notes'])
+			publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '%WORKSPACE%', reportFiles: 'ReleaseNotes_%LAST_VERSION_STAMP%-%VERSION_STAMP%.html', reportName: 'Build Release Notes', reportTitles: 'Build Releae Notes'])
+			}
+		 }
       }
     }
     stage('Deploy to Nexus') {
