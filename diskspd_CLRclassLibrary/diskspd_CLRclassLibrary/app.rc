@@ -49,8 +49,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,0,21,3
- PRODUCTVERSION 2,0,21,3
+ FILEVERSION 2,0,21,4
+ PRODUCTVERSION 2,0,21,4
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -67,12 +67,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Enmotus, Inc."
             VALUE "FileDescription", "DiskSpd Class Library"
-            VALUE "FileVersion", "2.0.21.3"
+            VALUE "FileVersion", "2.0.21.4"
             VALUE "InternalName", "diskspd_CLRclassLibrary.dll"
             VALUE "LegalCopyright", "Copyright (C) Enmotus, Inc. 2019"
             VALUE "OriginalFilename", "diskspd_CLRclassLibrary.dll"
             VALUE "ProductName", "DiskSpd Class Library"
-            VALUE "ProductVersion", "2.0.21.3"
+            VALUE "ProductVersion", "2.0.21.4"
         END
     END
     BLOCK "VarFileInfo"
