@@ -55,10 +55,10 @@ pipeline {
 			bat(script: 'git push https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git master --tags' )
 		}
       }
-    }
+    }F
 	stage('Doxygen') {
       steps {
-        dir(path: 'C:\\Jenkins\\workspace\\EnhancedUserInterface_master\\StorageAnalyzer') {
+        dir(path: '%WORKSPACE%\\StorageAnalyzer') {
           bat 'C:\\Jenkins\\workspace\\output\\doxygen.exe %WORKSPACE%\\Doxygen.cfg'
         }
 		publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '%WORKSPACE%\\docs', reportFiles: 'index.html', reportName: 'Architectural Documentation', reportTitles: 'Diskspd CLR Class Library'])
