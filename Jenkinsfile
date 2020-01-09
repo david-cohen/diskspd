@@ -59,8 +59,8 @@ pipeline {
 	stage('Doxygen') {
       steps {
           bat 'C:\\Jenkins\\workspace\\output\\doxygen.exe %WORKSPACE%\\Doxygen.cfg'
-	      publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '${WORKSPACE}\\docs', reportFiles: 'index.html', reportName: 'Architectural Documentation', reportTitles: 'Diskspd CLR Class Library'])
-      }
+	  publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'docs', reportFiles: 'index.html', reportName: 'Generated Architectural Documents', reportTitles: ''])
+      	}
     }
 	stage('Release Notes') {
       steps {
