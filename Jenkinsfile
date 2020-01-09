@@ -26,7 +26,7 @@ pipeline {
 				echo "${VERSION_STAMP}"  
 				withCredentials([usernamePassword(credentialsId: 'EnmotusGitAgent', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
 					bat(script: 'git commit -a -m "Updated Version Stamp to %VERSION_STAMP%"')
-					bat(script: 'git pull https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git')
+					bat(script: 'git pull --tags https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git')
 					bat(script: 'git push https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git master')
 				}
 			    }
@@ -58,20 +58,20 @@ pipeline {
     }
 	stage('Doxygen') {
       steps {
-        dir(path: '%WORKSPACE%') {
           bat 'C:\\Jenkins\\workspace\\output\\doxygen.exe %WORKSPACE%\\Doxygen.cfg'
-        }
-		publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '%WORKSPACE%\\docs', reportFiles: 'index.html', reportName: 'Architectural Documentation', reportTitles: 'Diskspd CLR Class Library'])
-      }
+	  publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'docs', reportFiles: 'index.html', reportName: 'Generated Architectural Documents', reportTitles: ''])
+      	}
     }
 	stage('Release Notes') {
       steps {
 		  script {
 		   if(currentBuild.changeSets.size() > 0) {
-			 bat 'C:\\Jenkins\\workspace\\output\\releasenotes.exe path="%WORKSPACE% name=Diskspd From=v2.0.20a To=%VERSION_STAMP% repo=https://github.com/Enmotus-Dave-Cohen/diskspd id=2388216 pivotal=cf2870f765936d635fa8bbdd20d81fea >> ReleaseNotes.html_v2.0.20a-%VERSION_STAMP%.html'
-			 bat 'C:\\Jenkins\\workspace\\output\\releasenotes.exe path="%WORKSPACE% name=Diskspd From=v2.0.20a To=%VERSION_STAMP% repo=https://github.com/Enmotus-Dave-Cohen/diskspd id=2388216 pivotal=cf2870f765936d635fa8bbdd20d81fea >> ReleaseNotes_%LAST_VERSION_STAMP%-%VERSION_STAMP%.html'
-			publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '%WORKSPACE%', reportFiles: 'ReleaseNotes.html_v2.0.20a-%VERSION_STAMP%.html', reportName: 'Release Notes', reportTitles: 'Release Notes'])
-			publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '%WORKSPACE%', reportFiles: 'ReleaseNotes_%LAST_VERSION_STAMP%-%VERSION_STAMP%.html', reportName: 'Build Release Notes', reportTitles: 'Build Releae Notes'])
+			 bat 'mkdir ReleaseNotes_v2.0.20a-%VERSION_STAMP%'
+			 bat 'mkdir ReleaseNotes_%LAST_VERSION_STAMP%-%VERSION_STAMP%'
+			 bat 'C:\\Jenkins\\workspace\\output\\releasenotes.exe path=%WORKSPACE% name=Diskspd From=v2.0.20a To=%VERSION_STAMP% repo=https://github.com/Enmotus-Dave-Cohen/diskspd id=2388216 pivotal=cf2870f765936d635fa8bbdd20d81fea >> ReleaseNotes_v2.0.20a-%VERSION_STAMP%\\index.html'
+			 bat 'C:\\Jenkins\\workspace\\output\\releasenotes.exe path=%WORKSPACE% name=Diskspd From=%LAST_VERSION_STAMP% To=%VERSION_STAMP% repo=https://github.com/Enmotus-Dave-Cohen/diskspd id=2388216 pivotal=cf2870f765936d635fa8bbdd20d81fea >> ReleaseNotes_%LAST_VERSION_STAMP%-%VERSION_STAMP%\\index.html'
+			publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "ReleaseNotes_v2.0.20a-"+env.VERSION_STAMP, reportFiles: 'index.html', reportName: 'Release Notes', reportTitles: 'Release Notes'])
+			publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "ReleaseNotes_"+env.LAST_VERSION_STAMP+"-"+env.VERSION_STAMP, reportFiles: 'index.html', reportName: 'Build Release Notes', reportTitles: 'Build Release Notes'])
 			}
 		 }
       }
