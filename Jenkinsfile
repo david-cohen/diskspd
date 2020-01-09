@@ -70,8 +70,8 @@ pipeline {
 			 bat 'mkdir ReleaseNotes_%LAST_VERSION_STAMP%-%VERSION_STAMP%'
 			 bat 'C:\\Jenkins\\workspace\\output\\releasenotes.exe path=%WORKSPACE% name=Diskspd From=v2.0.20a To=%VERSION_STAMP% repo=https://github.com/Enmotus-Dave-Cohen/diskspd id=2388216 pivotal=cf2870f765936d635fa8bbdd20d81fea >> ReleaseNotes_v2.0.20a-%VERSION_STAMP%\\index.html'
 			 bat 'C:\\Jenkins\\workspace\\output\\releasenotes.exe path=%WORKSPACE% name=Diskspd From=%LAST_VERSION_STAMP% To=%VERSION_STAMP% repo=https://github.com/Enmotus-Dave-Cohen/diskspd id=2388216 pivotal=cf2870f765936d635fa8bbdd20d81fea >> ReleaseNotes_%LAST_VERSION_STAMP%-%VERSION_STAMP%\\index.html'
-			publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "ReleaseNotes-v2.0.20a-"+${VERSION_STAMP}, reportFiles: 'index.html', reportName: 'Release Notes', reportTitles: 'Release Notes'])
-			publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "ReleaseNotes-"+${LAST_VERSION_STAMP}+"-"+${VERSION_STAMP}, reportFiles: 'index.html', reportName: 'Build Release Notes', reportTitles: 'Build Release Notes'])
+			publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "ReleaseNotes-v2.0.20a-"+env.VERSION_STAMP, reportFiles: 'index.html', reportName: 'Release Notes', reportTitles: 'Release Notes'])
+			publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "ReleaseNotes-"+env.LAST_VERSION_STAMP+"-"+env.VERSION_STAMP, reportFiles: 'index.html', reportName: 'Build Release Notes', reportTitles: 'Build Release Notes'])
 			}
 		 }
       }
