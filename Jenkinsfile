@@ -58,7 +58,7 @@ pipeline {
     }
 	stage('Doxygen') {
       steps {
-        dir(path: '%WORKSPACE%\\StorageAnalyzer') {
+        dir(path: '%WORKSPACE%') {
           bat 'C:\\Jenkins\\workspace\\output\\doxygen.exe %WORKSPACE%\\Doxygen.cfg'
         }
 		publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '%WORKSPACE%\\docs', reportFiles: 'index.html', reportName: 'Architectural Documentation', reportTitles: 'Diskspd CLR Class Library'])
