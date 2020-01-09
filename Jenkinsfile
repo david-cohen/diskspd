@@ -55,7 +55,7 @@ pipeline {
 			bat(script: 'git push https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git master --tags' )
 		}
       }
-    }F
+    }
 	stage('Doxygen') {
       steps {
         dir(path: '%WORKSPACE%\\StorageAnalyzer') {
