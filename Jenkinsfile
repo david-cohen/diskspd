@@ -26,7 +26,7 @@ pipeline {
 				echo "${VERSION_STAMP}"  
 				withCredentials([usernamePassword(credentialsId: 'EnmotusGitAgent', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
 					bat(script: 'git commit -a -m "Updated Version Stamp to %VERSION_STAMP%"')
-					bat(script: 'git pull https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git')
+					bat(script: 'git pull --tags https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git')
 					bat(script: 'git push https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git master')
 				}
 			    }
