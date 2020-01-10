@@ -49,17 +49,25 @@ pipeline {
 	  }
 	  stage('Tag Build') {
       steps {
-		withCredentials([usernamePassword(credentialsId: 'EnmotusGitAgent', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
-			bat(script: 'git tag -a %VERSION_STAMP% -m "Build %VERSION_STAMP%"')
-			bat(script: 'git pull https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git')
-			bat(script: 'git push https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git master --tags' )
+	  		  script {
+				 if(currentBuild.changeSets.size() > 0) {
+					withCredentials([usernamePassword(credentialsId: 'EnmotusGitAgent', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+						bat(script: 'git tag -a %VERSION_STAMP% -m "Build %VERSION_STAMP%"')
+						bat(script: 'git pull https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git')
+						bat(script: 'git push https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git master --tags' )
+				}
+			}
 		}
       }
     }
 	stage('Doxygen') {
       steps {
-          bat 'C:\\Jenkins\\workspace\\output\\doxygen.exe %WORKSPACE%\\Doxygen.cfg'
-	  publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'docs', reportFiles: 'index.html', reportName: 'Generated Architectural Documents', reportTitles: ''])
+	  		  script {
+				if(currentBuild.changeSets.size() > 0) {
+				  bat 'C:\\Jenkins\\workspace\\output\\doxygen.exe %WORKSPACE%\\Doxygen.cfg'
+			  publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'docs', reportFiles: 'index.html', reportName: 'Generated Architectural Documents', reportTitles: ''])
+				}
+			}
       	}
     }
 	stage('Release Notes') {
