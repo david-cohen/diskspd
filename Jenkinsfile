@@ -75,8 +75,8 @@ pipeline {
 		  script {
 		   if(currentBuild.changeSets.size() > 0) {
 			   dir(path: 'C:\\Jenkins\\workspace\\output') {
-				 bat 'mkdir ReleaseNotes_v2.0.20a-%VERSION_STAMP%'
-				 bat 'mkdir ReleaseNotes_%LAST_VERSION_STAMP%-%VERSION_STAMP%'
+				 bat 'mkdir %WORKSPACE%\\ReleaseNotes_v2.0.20a-%VERSION_STAMP%'
+				 bat 'mkdir %WORKSPACE%\\ReleaseNotes_%LAST_VERSION_STAMP%-%VERSION_STAMP%'
 				 bat 'C:\\Jenkins\\workspace\\output\\releasenotes.exe path=%WORKSPACE% name=Diskspd From=v2.0.20a To=%VERSION_STAMP% repo=https://github.com/Enmotus-Dave-Cohen/diskspd id=2388216 pivotal=cf2870f765936d635fa8bbdd20d81fea >> 5WORKSPACE%\\ReleaseNotes_v2.0.20a-%VERSION_STAMP%\\index.html'
 				 bat 'C:\\Jenkins\\workspace\\output\\releasenotes.exe path=%WORKSPACE% name=Diskspd From=%LAST_VERSION_STAMP% To=%VERSION_STAMP% repo=https://github.com/Enmotus-Dave-Cohen/diskspd id=2388216 pivotal=cf2870f765936d635fa8bbdd20d81fea >> %WORKSPACE%\\ReleaseNotes_%LAST_VERSION_STAMP%-%VERSION_STAMP%\\index.html'
 				}
