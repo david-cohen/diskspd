@@ -35,7 +35,8 @@ pipeline {
 				bat(script: 'C:\\Jenkins\\workspace\\output\\versionstamp.exe file=%WORKSPACE%\\diskspd_CLRclassLibrary\\diskspd_CLRclassLibrary\\app.rc  >> version.txt')
 				}
 				env.VERSION_STAMP = readFile 'version.txt'	
-				echo "${VERSION_STAMP}"  
+				echo "${VERSION_STAMP}" 
+				currentBuild.description = "Version ${VERSION_STAMP}"
 
 			    }
 			}
