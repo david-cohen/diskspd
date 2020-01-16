@@ -1,4 +1,4 @@
-library identifier: 'EnmotusBuildTools@master', retriever: modernSCM([$class: 'GitSCMSource', credentialsId: 'EnmotusGitAgent', gitTool: 'master_git', remote: 'https://github.com/Enmotus-Dave-Cohen/EnmotusBuildTools.git', traits: [[$class: 'jenkins.plugins.git.traits.BranchDiscoveryTrait'], [$class: 'GitToolSCMSourceTrait', gitTool: 'master_git']]])
+library identifier: 'EnmotusBuildTools@master', retriever: modernSCM([$class: 'GitSCMSource', credentialsId: 'EnmotusGitAgent', gitTool: 'master_git', remote: 'https://github.com/Enmotus/EnmotusBuildTools.git', traits: [[$class: 'jenkins.plugins.git.traits.BranchDiscoveryTrait'], [$class: 'GitToolSCMSourceTrait', gitTool: 'master_git']]])
 pipeline {
   agent {
     node {
@@ -8,7 +8,7 @@ pipeline {
   stages {
     stage('Call Library') {
 		steps {
-			checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'WindowsBuilder']], gitTool: 'default', submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'EnmotusGitAgent', url: 'https://github.com/Enmotus-Dave-Cohen/WindowsBuilder.git']]]
+			checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'WindowsBuilder']], gitTool: 'default', submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'EnmotusGitAgent', url: 'https://github.com/Enmotus/WindowsBuilder.git']]]
 			script {
 			InstallWindowsBuilderDependencies.call()
 			  }
@@ -26,8 +26,8 @@ pipeline {
 				echo "${VERSION_STAMP}"  
 				withCredentials([usernamePassword(credentialsId: 'EnmotusGitAgent', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
 					bat(script: 'git commit -a -m "Updated Version Stamp to %VERSION_STAMP%"')
-					bat(script: 'git pull --tags https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git')
-					bat(script: 'git push https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git master')
+					bat(script: 'git pull --tags https://%USER%:%PASSWORD%@github.com/Enmotus/diskspd.git')
+					bat(script: 'git push https://%USER%:%PASSWORD%@github.com/Enmotus/diskspd.git master')
 				}
 			    }
 			    else {
@@ -54,8 +54,8 @@ pipeline {
 				 if(currentBuild.changeSets.size() > 0) {
 					withCredentials([usernamePassword(credentialsId: 'EnmotusGitAgent', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
 						bat(script: 'git tag -a %VERSION_STAMP% -m "Build %VERSION_STAMP%"')
-						bat(script: 'git pull https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git')
-						bat(script: 'git push https://%USER%:%PASSWORD%@github.com/Enmotus-Dave-Cohen/diskspd.git master --tags' )
+						bat(script: 'git pull https://%USER%:%PASSWORD%@github.com/Enmotus/diskspd.git')
+						bat(script: 'git push https://%USER%:%PASSWORD%@github.com/Enmotus/diskspd.git master --tags' )
 				}
 			}
 		}
@@ -78,8 +78,8 @@ pipeline {
 			   dir(path: 'C:\\Jenkins\\workspace\\output') {
 				 bat 'mkdir %WORKSPACE%\\ReleaseNotes_v2.0.20a-%VERSION_STAMP%'
 				 bat 'mkdir %WORKSPACE%\\ReleaseNotes_%LAST_VERSION_STAMP%-%VERSION_STAMP%'
-				 bat 'C:\\Jenkins\\workspace\\output\\releasenotes.exe path=%WORKSPACE% name=Diskspd From=v2.0.20a To=%VERSION_STAMP% repo=https://github.com/Enmotus-Dave-Cohen/diskspd id=2388216 pivotal=cf2870f765936d635fa8bbdd20d81fea >> 5WORKSPACE%\\ReleaseNotes_v2.0.20a-%VERSION_STAMP%\\index.html'
-				 bat 'C:\\Jenkins\\workspace\\output\\releasenotes.exe path=%WORKSPACE% name=Diskspd From=%LAST_VERSION_STAMP% To=%VERSION_STAMP% repo=https://github.com/Enmotus-Dave-Cohen/diskspd id=2388216 pivotal=cf2870f765936d635fa8bbdd20d81fea >> %WORKSPACE%\\ReleaseNotes_%LAST_VERSION_STAMP%-%VERSION_STAMP%\\index.html'
+				 bat 'C:\\Jenkins\\workspace\\output\\releasenotes.exe path=%WORKSPACE% name=Diskspd From=v2.0.20a To=%VERSION_STAMP% repo=https://github.com/Enmotus/diskspd id=2388216 pivotal=cf2870f765936d635fa8bbdd20d81fea >> 5WORKSPACE%\\ReleaseNotes_v2.0.20a-%VERSION_STAMP%\\index.html'
+				 bat 'C:\\Jenkins\\workspace\\output\\releasenotes.exe path=%WORKSPACE% name=Diskspd From=%LAST_VERSION_STAMP% To=%VERSION_STAMP% repo=https://github.com/Enmotus/diskspd id=2388216 pivotal=cf2870f765936d635fa8bbdd20d81fea >> %WORKSPACE%\\ReleaseNotes_%LAST_VERSION_STAMP%-%VERSION_STAMP%\\index.html'
 				}
 
 				publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "ReleaseNotes_v2.0.20a-"+env.VERSION_STAMP, reportFiles: 'index.html', reportName: 'Release Notes', reportTitles: 'Release Notes'])
